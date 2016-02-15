@@ -1,0 +1,124 @@
+
+<style>
+@charset "UTF-8";
+
+* {
+  box-sizing: inherit;
+}
+
+table {
+  box-sizing: border-box;
+  display: table;
+ 
+  overflow: hidden;
+  margin: 4em auto;
+  border-collapse: collapse;
+  min-width: 23em;
+  width: 95%;
+  max-width: 56em;
+  border-radius: .5em;
+  box-shadow: 0 0 .5em #000;
+}
+
+thead {
+  background: linear-gradient(#175717, #28782b);
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+th {
+  text-align: center;
+}
+
+
+tbody {
+  text-align: center;
+  color: #aaa;
+}
+
+
+tr {
+  display: table-row;
+  overflow: hidden;
+  width: 100%;
+}
+
+
+.thead {
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.cellhead {
+  padding: 5px;
+  text-align: center;
+}
+
+.odd {
+  background: linear-gradient(#175717 1px, #77dd77 1px, #77cc77 calc(100% - 1px), #779977 calc(100% - 1px));
+}
+
+.even {
+  background: linear-gradient(#175717 1px, #77bb77 1px, #77aa77 calc(100% - 1px), #779977 calc(100% - 1px));
+}
+
+td {
+ padding: 5px; 
+ 
+}
+
+</style>
+
+<table>
+    <caption>
+    <h3>My table caption</h3>
+    </caption>
+    <thead>
+        <tr class="thead">
+            <td class="cellhead">Head Cell0</td>
+            <td class="cellhead">Head Cell1</td>
+            <td class="cellhead">Head Cell2</td>
+            <td class="cellhead">Head Cell3</td>
+            <td class="cellhead">Head Cell4</td>
+        </tr>
+        <tr class="odd">
+            <td>Cell row0 col0</td>
+            <td>Cell row0 col1</td>
+            <td>Cell row0 col2</td>
+            <td>Cell row0 col3</td>
+            <td>Cell row0 col4</td>
+        </tr>
+        <tr class="even">
+            <td>Cell row1 col0</td>
+            <td>Cell row1 col1</td>
+            <td>Cell row1 col2</td>
+            <td>Cell row1 col3</td>
+            <td>Cell row1 col4</td>
+        </tr>
+        <tr class="odd">
+            <td>Cell row2 col0</td>
+            <td>Cell row2 col1</td>
+            <td>Cell row2 col2</td>
+            <td>Cell row2 col3</td>
+            <td>Cell row2 col4</td>
+        </tr>
+        <tr class="even">
+            <td>Cell row3 col0</td>
+            <td>Cell row3 col1</td>
+            <td>Cell row3 col2</td>
+            <td>Cell row3 col3</td>
+            <td>Cell row3 col4</td>
+        </tr>
+        <tr class="odd">
+            <td>Cell row4 col0</td>
+            <td>Cell row4 col1</td>
+            <td>Cell row4 col2</td>
+            <td>Cell row4 col3</td>
+            <td>Cell row4 col4</td>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr><td><b>This is a table footer</b></td></tr>
+    </tfoot>
+</table>
