@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html class=''>
+<head><meta charset='UTF-8'>
+
+
+<link rel='stylesheet prefetch' href='css/normalize.css'>
+<style>
+html {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(center, #ffffff 0%, #cccccc 70%, #cccccc 100%) no-repeat;
+  background: -moz-radial-gradient(center, #FFF 0%, #CCC 70%, #CCC 100%) no-repeat;
+  background: -webkit-radial-gradient(center, #FFF 0%, #CCC 70%, #CCC 100%) no-repeat;
+}
+
+.commander {
+  position: relative;
+  margin-left: -100px;
+  left: 50%;
+}
+
+.commander p {
+  width: 200px;
+  color: #2E3F47;
+  font-size: 1.5em;
+  font-family: 'Open Sans', sans-serif;
+  text-align: center;
+}
+
+.wrapper {
+  width: 150px;
+  margin: 10px auto;
+}
+
+.button {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border: 1px solid;
+  border-radius: 50%;
+  background: #2E3F47;
+  z-index: 10;
+}
+
+.line {
+  background: #ccc;
+  width: 90px;
+  height: 15px;
+  margin: 15px auto;
+}
+
+.line__first {
+  margin-top: 37px;
+}
+
+.menu {
+  z-index: 1;
+  float: left;
+  width: 100%;
+}
+
+/* for the list to be horizontaly centered */
+.table {
+  display: table;
+  margin: 0 auto;
+}
+
+.menu__list {
+  text-align: center;
+  width: 100%;
+  padding-left: 0;
+}
+
+/* Animation keyframes for the drop down */
+@keyframes drop {
+  from {
+    top: 0px;
+  }
+  70% {
+    top: 165px;
+    animation-timing-function: ease-in;
+  }
+  to {
+    top: 150px;
+    animation-timing-function: ease-out;
+  }
+}
+@-webkit-keyframes drop {
+  from {
+    top: 0px;
+  }
+  70% {
+    top: 165px;
+    -webkit-animation-timing-function: ease-in;
+  }
+  to {
+    top: 150px;
+    -webkit-animation-timing-function: ease-out;
+  }
+}
+li {
+  position: relative;
+  list-style: none;
+  padding-bottom: 15px;
+  top: 0px;
+}
+
+li a {
+  text-decoration: none;
+  color: grey;
+  text-align: center;
+  font-size: 1.5em;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.menu__list__item {
+  opacity: 0;
+}
+
+/*Animation classes to add to list-items that should be animated*/
+.list--animation, .list--animation--delay1, .list--animation--delay2 {
+  animation: drop 0.9s;
+  -webkit-animation: drop 0.9s;
+  animation-fill-mode: forwards;
+  opacity: 1;
+  -webkit-animation-fill-mode: forwards;
+  opacity: 1;
+}
+
+.list--animation--delay1 {
+  animation-delay: 0.5s;
+  -webkit-animation-delay: 0.5s;
+}
+
+.list--animation--delay2 {
+  animation-delay: 1s;
+  -webkit-animation-delay: 1s;
+}
+</style></head><body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Drop Menu</title>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+</head>
+<body>
+  <div class="commander"><p>Click the Button!</p></div>
+  <div class="wrapper">
+    
+    <div class="menu">
+      <div class="table">
+        
+        <ul class="menu__list hidden">
+          <li class="menu__list__item item1"><a href="#">Home</a></li>
+          <li class="menu__list__item item2"><a href="#">Portfolio</a></li>
+          <li class="menu__list__item item3"><a href="#">About</a></li>
+        </ul>
+      
+      </div>
+    </div>
+    <div class="button">
+      <div class="line line__first"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+    </div>
+  
+  </div>
+</body>
+</html>
+<script src='js/jquery.min.js'></script>
+<script>
+$('.button').click(function () {
+    if ($('.menu__list').hasClass('hidden')) {
+        $('.item1').addClass('list--animation');
+        $('.item2').addClass('list--animation--delay1');
+        $('.item3').addClass('list--animation--delay2');
+        $('.menu__list').removeClass('hidden');
+    } else {
+        $('.item1').removeClass('list--animation');
+        $('.item2').removeClass('list--animation--delay1');
+        $('.item3').removeClass('list--animation--delay2');
+        $('.menu__list').addClass('hidden');
+    }
+});
+
+</script>
+
+</body></html>

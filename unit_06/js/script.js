@@ -221,6 +221,84 @@ var slide_ul;
  }
 
 
+var menuSlider=function(){
+  var menu_container, elements, g_slide, current_slide, quote, interval_val; 
+  elements=[]; 
+  quote=8; 
+  interval_val=8;
+  return{
+    init:function(menu,slide){
+      menu_container=document.getElementById(menu); 
+      elements=menu_container.getElementsByTagName('li');
+      
+      var i, l, current_width, current_position; 
+      i=0; 
+      l=elements.length;
+      
+      for(i;i<l;i++){
+        var current,current_value; 
+        current=elements[i]; 
+        current_value=current.value; 
+        
+        if(current_value==1){
+          current_slide=current; 
+          current_width=current.offsetWidth; 
+          current_position=current.offsetLeft;
+        }
+        current.onmouseover=function(){
+          menuSlider.mouse_event(this);
+        }; 
+        current.onmouseout=function(){
+          menuSlider.mouse_event(current_slide);
+        };
+      }
+      g_slide=document.getElementById(slide); 
+
+      g_slide.style.width=current_width+'px'; 
+
+      g_slide.style.left=current_position+'px';
+    },
+    
+    mouse_event:function(cur_slide){
+      
+      clearInterval(menu_container.timeinterval);
+      
+      var elem_left,elem_width; 
+      
+      elem_left=parseInt(cur_slide.offsetLeft); 
+      elem_width=parseInt(cur_slide.offsetWidth);
+      
+      menu_container.timeinterval=setInterval(function(){
+                                    menuSlider.move(elem_left,elem_width)
+                                  },
+                                interval_val);
+    },
+
+    move:function(elem_left,elem_width){
+      var l,w; 
+
+      l=parseInt(g_slide.offsetLeft); 
+      w=parseInt(g_slide.offsetWidth);
+      
+      if(l!=elem_left||w!=elem_width){
+        if(l!=elem_left){
+          var ld,lr,li; 
+          ld=(l>elem_left)?-1:1; 
+          lr=Math.abs(elem_left-l); 
+          li=(lr<quote)?ld*lr:ld*quote; 
+          g_slide.style.left=(l+li)+'px';
+        }
+        if(w!=elem_width){
+          var wd,wr,wi; 
+          wd=(w>elem_width)?-1:1; 
+          wr=Math.abs(elem_width-w); 
+          wi=(wr<quote)?wd*wr:wd*quote; 
+          g_slide.style.width=(w+wi)+'px';
+        }
+      }else{
+        clearInterval(menu_container.timeinterval);
+      }
+}};}();
 
 
   (function() {
@@ -274,3 +352,4 @@ var slide_ul;
   window.tabs = tabs;
 
 })();
+
