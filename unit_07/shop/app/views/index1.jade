@@ -1,0 +1,314 @@
+extends layout
+
+block content
+  script(src='/javascripts/cartj.js')
+  #cart
+      h2 Your Shopping Cart
+      |   
+      ul.cart-items
+      |   
+      .total
+        .subtotalTotal
+          | Subtotal
+          span $0.00
+        |     
+        .taxes
+          | Tax
+          span $0.00
+        |     
+        .shipping
+          | Shipping
+          span $0.00
+        |     
+        .finalTotal
+          | Total
+          span $0.00
+        |     
+        a.checkout
+          | Check Out
+        |     
+        p.error
+        |         
+        #payment_wrapper(style='display:none')
+          #payment
+            p.headings Pay for your products
+            |                                           
+            p Enter your credit / debit details:
+            |       
+            |                               
+            ul
+              li
+                label.card Card type
+                |    
+                |                                                 
+                select#cardType(name='cardtype')
+                  option(selected='selected' value='Visa Debit') Visa Debit
+                  |                                                 
+                  option(value='Mastercard') Mastercard
+                  |                                                 
+                  option(value='Visa Credit') Visa Credit
+                  |                                                 
+                  option(value='Electron') Electron
+                  |                                                 
+                  option(value='Solo') Solo
+            |                                                   
+            ul
+              li
+                label.card Card number
+                |                                                 
+                input#cardNumber(type='text')
+            |                                                 
+            ul
+              li
+                label.card Name on card
+                |                                                 
+                input#cardholderName(type='text')
+            |                             
+            ul
+              li
+                label.card Expiration Date 
+                |                                                 
+                select#expirationMonth
+                  option(selected='selected' value='0') month
+                  |                                                 
+                  option(value='01') 01
+                  |                                                 
+                  option(value='02') 02
+                  |                                                 
+                  option(value='03') 03
+                  |                                                 
+                  option(value='04') 04
+                  |                                                 
+                  option(value='05') 05
+                  |                                                 
+                  option(value='06') 06
+                  |                                                 
+                  option(value='07') 07
+                  |                                                 
+                  option(value='08') 08
+                  |                                                 
+                  option(value='09') 09
+                  |                                                 
+                  option(value='10') 10
+                  |                                                 
+                  option(value='11') 11
+                  |                                                 
+                  option(value='12') 12
+                |                                                 
+                |                                                 
+                select#expirationYear(name='expirationYear')
+                  option(selected='selected' value='0') year
+                  |                                                
+                  |                                                 
+                  |                                                 
+                  option(value='13') 13
+                  |                                                 
+                  option(value='14') 14
+                  |                                                 
+                  option(value='15') 15
+                  |                                                 
+                  option(value='16') 16
+                  |                                                 
+                  option(value='17') 17
+                  |                                                 
+                  option(value='18') 18
+            |                             
+            ul
+              li
+                label#moko.card(for='cv2') 3 Digit Verification Number
+                |                                                 
+                input#cv2(size='3' maxlength='3' type='text')
+          // end payment
+          p.headings  Personal details
+          |                                  
+          ul
+            li
+              label.box Title
+              |                                             
+              select#title
+                option(selected='selected' value='Mr') Mr
+                |                                             
+                option(value='Ms') Ms
+                |                                             
+                option(value='Mrs') Mrs
+                |                                             
+                option(value='Miss') Miss
+          |  
+          |                                                
+          |                           
+          |                                         
+          ul
+            li
+              label.box First name
+              |                                         
+              input#firstName(type='text')
+          |                                         
+          ul
+            li
+              label.box Surname
+              |                                         
+              input#surName(type='text')
+          |                                          
+          ul
+            li
+              label.box Address
+              |                                          
+              input#address(type='text')
+          |                                          
+          ul
+            li
+              label.box Address Line 2
+              |                                          
+              input#addressLine2(type='text')
+          |                                          
+          ul
+            li
+              label.box Town/City
+              |                                          
+              input#town(type='text')
+          |                                          
+          ul
+            li
+              label.box Post code
+              |                                          
+              input#postCode(type='text')
+          // end left_content
+          p.headings Dispatching to
+          |                                                           
+          |                                         
+          ul
+            li
+              label.box Title
+              |                                         
+              select#sendingTitle
+                option(selected='selected' value='Mr') Mr
+                |                                         
+                option(value='Ms') Ms
+                |                                         
+                option(value='Mrs') Mrs
+                |                                         
+                option(value='Miss') Miss
+          |  
+          |                                       
+          ul
+            li
+              label.box First name
+              |                                         
+              input#sendingFirstName(type='text')
+          |                                         
+          ul
+            li
+              label.box Surname
+              |                                         
+              input#sendingSurname(type='text')
+          |                                          
+          ul
+            li
+              label.box Address
+              |                                         
+              input#sendingAddress(type='text')
+          |                                          
+          ul
+            li
+              label.box Address Line 2
+              |                                         
+              input#sendingAddressLine2(type='text')
+          |                                          
+          ul
+            li
+              label.box Town/City
+              |                                          
+              input#sendingTown(type='text')
+          |                                          
+          ul
+            li
+              label.box Post code
+              |                                          
+              input#sendingPostCode(type='text')
+          // end right content
+          input#calculateButton.detalis(name='Place your order' value='Place your order' onclick='takeDetalis()' type='button')
+          |                                      
+          |                                       
+          |                   
+          #details
+            .leftdetalis
+              p Personal detalis
+              |                                                     
+              span#dispTitle
+              |                                                     
+              span#dispFirstName
+              |                                                     
+              span#dispSurname
+              br
+              |                                                     
+              span#dispAddress
+              |                                                     
+              span#dispAddressLine2
+              br
+              |                                                     
+              span#dispTown
+              br
+              |                                                     
+              span#dispPostCode
+            // end leftdetalis
+            .rightdetalis
+              p Delivery detalis
+              |                                                                      
+              span#dispSenTitle
+              |                                                                      
+              span#dispSenFirstName
+              |                                                                      
+              span#dispSenSurname
+              br
+              |                                                                  
+              span#dispSenAddress
+              |          
+              |                                                                  
+              span#dispSenAddressLine2
+              br
+              |                                                                  
+              span#dispSenTown
+              br
+              |                                                                  
+              span#dispSenPostCode
+            // end rightdetalis
+        // end payment_wrapper
+    #wrap.wrap
+      header
+        a.logo(href='#')
+          | Home 
+          span.brandico-github
+          |  Catalog
+        |     
+        a.cart-link(href='#menu')
+          span.cart-text.fontawesome-shopping-cart
+            span Cart
+          |       
+          span.returnToShop &larr; Back
+          |       
+          span.cart-quantity.empty 0
+      |   
+      section.shop
+      |   
+      footer
+        p Happy Shopping.
+      script#productTemplate(type='text/template').
+       <div class="product">
+       <h1></h1>
+       <p></p>
+       <div class="button">
+       <div class="price"></div>
+       <a class="addtocart">
+       <div class="add">Add to Cart</div>
+       <div class="added">Added!</div>
+       </a>
+       </div>
+       </div>
+     script#cartItem(type='text/template').
+       <li><div class="cart-product">
+       <input class="quantity" value="1">
+       </div><div class="cart-description">
+       <h3></h3>
+       <span class="subtotal"></span>
+       </div></li>
+

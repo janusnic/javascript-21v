@@ -1,0 +1,25 @@
+doctype html
+html
+  head
+    title= title
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    script(src='/javascripts/modernizr.js' type='text/javascript')
+    link(rel='stylesheet prefetch' href='/stylesheets/normalize.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+   
+  body
+    #header
+      span My Simple Blog
+      ul#menu
+        li
+          a.article(href='/ajax') Blog
+        li
+          a.article(href='/comment') Comments
+        li
+          a.article(href='/getpost') Get/Post
+        li
+          a.article(href='/test1') Ajax
+        li
+          a.article(href='/table') Table
+    block content

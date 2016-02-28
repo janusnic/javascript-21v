@@ -1,0 +1,10 @@
+extends blog
+
+block content
+  h1 Ajax Get
+    #content
+      h2 How to GET and POST in node.js
+      form(method='post', action='/api/test')
+        textarea#textbox(name='text') Enter text here that will be sent to the server using the POST method.
+        br
+        input#submit(type='submit', name='submit', value='SUBMIT')

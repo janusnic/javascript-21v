@@ -1,0 +1,69 @@
+extends blog
+
+block content
+  h1 Comments
+    script(language='JavaScript').
+      function XmlHttp()
+      {
+      var xmlhttp;
+      try{xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");}
+      catch(e)
+      {
+      try {xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");}
+      catch (E) {xmlhttp = false;}
+      }
+      if (!xmlhttp && typeof XMLHttpRequest!='undefined')
+      {
+      xmlhttp = new XMLHttpRequest();
+      }
+      return xmlhttp;
+      }
+      function ajax(param)
+      {
+      if (window.XMLHttpRequest) req = new XmlHttp();
+      method=(!param.method ? "POST" : param.method.toUpperCase());
+      if(method=="GET")
+      {
+      send=null;
+      param.url=param.url+"&ajax=true";
+      }
+      else
+      {
+      send="";
+      for (var i in param.data) send+= i+"="+param.data[i]+"&";
+      // send=send+"ajax=true"; // если хотите передать сообщение об успехе
+      }
+      req.open(method, param.url, true);
+      if(param.statbox)document.getElementById(param.statbox).innerHTML = '<img src="/images/wait.gif">';
+      req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      req.send(send);
+      req.onreadystatechange = function()
+      {
+      if (req.readyState == 4 && req.status == 200) //если ответ положительный
+      {
+      if(param.success)param.success(req.responseText);
+      }
+      }
+      }
+    #content
+      #status(style='width:470px;background:#fff;padding:20px 10px 20px 10px;border:solid 5px #D1D1D1;font: 13 Arial;')
+        | Ни одного комментария пока нет.
+      br
+      form(action='/')
+        p
+          b Оставьте ваш комментарий
+        p
+          textarea#area_1(name='area_1', style='height:50px; width:500px;padding:10px;font: 13 Arial;') Введите имя
+        p
+          textarea#area_2(name='area_1', style='height:100px; width:500px;padding:10px;font: 13 Arial;') Текст сообщения
+        input(type='button', value='Сохранить комментарий', onclick='\
+        ajax({\
+        url:"/",\
+        statbox:"status",\
+        method:"POST",\
+        data:\
+        {                                                            first_area:document.getElementById("area_1").value,\
+        second_area:document.getElementById("area_2").value\
+        },\
+        success:function(data){document.getElementById("status").innerHTML=data;}\
+        })')
