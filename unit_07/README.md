@@ -2117,6 +2117,76 @@ form.on('submit', function (e) {
 
 </body></html>
 ```
+Login Validation
+================
+```
+          <form id="login_form" accept-charset="utf-8">
+            <label><span>Name</span><input type="text" placeholder="Username"/></label>
+            <label><span>Password</span><input type="password" placeholder="Password"/></label>
+            <button id='signin' name="signin" type="submit" value="Send">Login</button>
+          </form>
+
+$(document).ready(function () {
+  
+
+  $('#login').on('click', function () {
+        $('#loginbox').toggleClass('on');
+  });  
+
+  $('#signup').on('click', function () {
+        $('#loginbox').toggleClass('on');
+  });
+
+   $('.toggle').click(function () {
+    $(this).children('i').toggleClass('fa-pencil');
+    $('.form').animate({
+        height: 'toggle',
+        'padding-top': 'toggle',
+        'padding-bottom': 'toggle',
+        opacity: 'toggle'
+    }, 'slow');
+  });  
+
+ var form_login = $('#login_form'), submit = form_login.find('[name="signin"]');
+ 
+ form_login.on('submit', function (e) {
+    e.preventDefault();
+    if (submit.attr('value') !== 'Send')
+        return;
+    var valid = true;
+    form_login.find('input').removeClass('invalid').each(function () {
+        if (!this.value) {
+            $(this).addClass('invalid');
+            
+            valid = false;
+        }
+    });
+    if (!valid) {
+        $('#loginbox').animate({ left: '-1em' }, 50).animate({ left: '1em' }, 100).animate({ left: '40%' }, 50);
+    } else {
+        submit.attr('value', 'Sending...').css({
+            boxShadow: '0 0 200em 200em rgba(225, 225, 225, 0.6)',
+            backgroundColor: '#ccc'
+        });
+        setTimeout(function () {
+            form_login.find('label').animate({ left: '100%' }, 500).animate({ opacity: '0' }, 500);
+        }, 1000);
+        setTimeout(function () {
+            submit.attr('value', 'Thank you :)').css({ boxShadow: 'none' });
+            console.log('test val',submit.attr('value'));
+        }, 2000);
+        setTimeout(function () {
+            form_login.find('input').val('');
+            form_login.find('label').css({ left: '0' }).animate({ opacity: '1' }, 500);
+            submit.attr('value', 'Send').css({ backgroundColor: '' });
+        }, 4000);
+        $('#loginbox').fadeToggle(1000).toggleClass('on');
+        //$('#loginbox').toggleClass('on');
+    }
+});
+
+```
+
 
 5 Account Setup
 ===============
