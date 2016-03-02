@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  script(src='/javascripts/ajax.js')
+  #content
+    h2 Test Ajax 1
+    button(onclick='loadTest()') Загрузить test.txt!
+    
+    h2 Test Ajax 2
+    button#button(onclick='loadAsyncTest()') Загрузить testa.txt!
+
+    h2 Test Ajax 3
+    button#button(onclick='loadPhones()') Загрузить phones.json!
+      

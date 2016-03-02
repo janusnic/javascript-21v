@@ -1,0 +1,57 @@
+doctype html
+html
+  head
+    title= title
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    script(src='/javascripts/modernizr.js' type='text/javascript')
+    link(rel='stylesheet prefetch' href='/stylesheets/normalize.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='/javascripts/prefixfree.min.js')
+    script(src='/javascripts/jquery.min.js')
+    script(src='/javascripts/login.js')
+   
+  body
+    #loginbox
+      .form
+        .toggle
+          i.fa.fa-times.fa-pencil
+          .tooltip Register
+        h2 Login to your account
+        form
+          input(type='text', id='user', placeholder='Username')
+          input(type='password', id='password', placeholder='Password')
+          button#signin(type='button') Login
+      .form
+        .toggle
+          i.fa.fa-times.fa-pencil
+          .tooltip Login
+        h2 Create an account
+        form
+          input(type='text', id='username', placeholder='Username')
+          input(type='password', id='userpasswd', placeholder='Password')
+          input(type='email', id='email', placeholder='Email Address')
+          input(type='tel', id='tel', placeholder='Phone Number')
+          button#signup(type='button') Register
+      .cta
+        a(href='#') Forgot your password?
+    #header
+      span My Simple Blog
+      ul#menu
+        li
+          a.article(href='/') Home
+        li
+          a.article(href='/test1') Ajax
+        li
+          a.article(href='/getpost') Get/Post
+        li
+          a.article(href='/statechange') Change State
+        li
+          a.article(href='/table') Table
+        li
+          a.article(href='/shop') Catalog
+        li
+          a.article(href='#' id='login') Login
+        
+
+    block content
