@@ -272,6 +272,119 @@ block content
 
 ```
 
+offset
+=======
+Получает текущие значения отступов относительно документа для первого элемента в наборе.
+Возвращаемый объект содержит два значение (сверху и слева) типа Float. Для фактического позиционирования браузеры обычно округляют эти значения до ближайшего целого. Этот метод работает только с видимыми элементами.
+
+ 
+
+Получает доступ к отступам второго параграфа:
+
+        var p = $("p:last");
+        var offset = p.offset();
+        p.html( "left: " + offset.left + ", top: " + offset.top );
+        <!DOCTYPE HTML>
+        <html>
+        <head>
+          <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+          <script>
+          $(document).ready(function(){
+            var p = $("p:last");
+        var offset = p.offset();
+        p.html( "left: " + offset.left + ", top: " + offset.top );
+          });
+          </script>
+
+          <style>
+          p { margin-left:10px; }
+          </style>
+        </head>
+        <body>
+          <p>Hello</p><p>2nd Paragraph</p>
+
+        </body>
+        </html>
+
+Нажмите, чтобы увидеть отступы.
+
+            $("*", document.body).click(function (e) {
+              var offset = $(this).offset();
+              e.stopPropagation();
+              $("#result").text(this.tagName + " coords ( " + offset.left + ", " +
+                                              offset.top + " )");
+            });
+        <!DOCTYPE HTML>
+        <html>
+        <head>
+          <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+          <script>
+          $(document).ready(function(){
+
+            $("*", document.body).click(function (e) {
+              var offset = $(this).offset();
+              e.stopPropagation();
+              $("#result").text(this.tagName + " coords ( " + offset.left + ", " +
+                                              offset.top + " )");
+            });
+
+          });
+          </script>
+
+          <style>
+          p { margin-left:10px; color:blue; width:200px;
+              cursor:pointer; }
+          span { color:red; cursor:pointer; }
+          div.abs { width:50px; height:50px; position:absolute;
+                    left:220px; top:35px; background-color:green;
+                    cursor:pointer; }
+          </style>
+        </head>
+        <body>
+          <div id="result">Click an element.</div>
+
+          <p>
+            This is the best way to <span>find</span> an offset.
+          </p>
+          <div class="abs">
+          </div>
+
+        </body>
+        </html>
+
+last
+====
+
+Соответствует последнему выбранному элементу.
+
+Поиск последней строки таблицы.
+        $("tr:last").css({backgroundColor: 'yellow', fontWeight: 'bolder'});
+        
+        <!DOCTYPE HTML>
+
+        <html>
+        <head>
+          <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+          <script>
+          $(document).ready(function(){
+            $("tr:last").css({backgroundColor: 'yellow', fontWeight: 'bolder'});
+          });
+          </script>
+
+        </head>
+        <body>
+          <table>
+            <tr><td>First Row</td></tr>
+            <tr><td>Middle Row</td></tr>
+
+            <tr><td>Last Row</td></tr>
+          </table>
+        </body>
+        </html>
+
 
 catalog.js
 ----------
