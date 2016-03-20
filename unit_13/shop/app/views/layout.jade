@@ -1,0 +1,117 @@
+doctype html
+html
+  head
+    title= title
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    script(src='/javascripts/modernizr.js' type='text/javascript')
+    link(rel='stylesheet prefetch' href='/stylesheets/normalize.css')
+    link(href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/login.css')
+    script(src='/javascripts/prefixfree.min.js')
+    script(src='/javascripts/jquery.min.js')
+    script(src='/javascripts/login.js')
+    
+    script(id='cartItem' type='text/template').
+      <li>
+      <div class="cart-product">
+      <input class="quantity" value="1">
+      <div class="cart-description">
+      <b></b>
+      <span class="subtotal"></span>
+      </div>
+      
+      <div class='delete-item'></div>
+      </li>
+      </div>
+    
+    script(id='cartPay' type='text/template').
+      <div class="popup-wrap">
+      <div class="popup-box">
+      <h2>Title of Popup</h2>
+      <h3>A sub-heading for the popup with a little description.</h3>
+      <a class="close-btn popup-close" href="#">x</a>
+      </div>
+      </div>
+   
+    body
+
+      #wrapper
+        
+        
+        #header
+          ul
+            li
+              a(href='') Home
+            li
+              a(href='') BRANDS
+            li
+              a(href='') DESIGNERS
+            li
+              a#login(href='#') SingIn/SignUp
+            li
+              a(href='') CONTACT
+          #loginbox
+            .form
+              .toggle
+                i.fa.fa-times.fa-pencil
+                .tooltip Register
+              h2 Login to your account
+              form#login_form(accept-charset='utf-8')
+                label
+                  span Name
+                  input(type='text', placeholder='Username')
+                label
+                  span Password
+                  input(type='password', placeholder='Password')
+                button#signin(name='signin', type='submit', value='Send') Login
+            .form
+              .toggle
+                i.fa.fa-times.fa-pencil
+                .tooltip Login
+              h2 Create an account
+              form#register(accept-charset='utf-8')
+                input(type='text', placeholder='Username')
+                input(type='password', placeholder='Password')
+                input(type='email', placeholder='Email Address')
+                input(type='tel', placeholder='Phone Number')
+                button#signup(name='signup', type='submit', value='Send') Register
+            .cta
+              a(href='#') Forgot your password?
+        #sidebar
+          a(class='cart-link' href='#')
+            span(class='cart-text fontawesome-shopping-cart')
+            span Cart
+          
+          #cart
+            span.empty No items in cart.
+
+            ul(class='cart-items')
+            
+            #checkout
+              h2 Your Shopping Cart
+              div(class='total')
+                div(class='subtotalTotal') Subtotal
+                  span $0.00
+              
+                div(class='taxes') Tax
+                  span $0.00
+              
+                div(class='shipping') Shipping
+                  span $0.00
+              
+                div(class='finalTotal') Total
+                  span $0.00
+                
+                a(class='checkout popup-btn') Check Out
+              
+                p(class='error')
+                    
+          h3 CATEGORIES
+          h3 COLORS
+          h3 SIZES
+          h3 PRICE RANGE
+
+        block content
+
