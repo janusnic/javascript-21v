@@ -38,6 +38,22 @@ app.post('/login',function(req,res){
   res.end("yes");
 });
 
+app.post('/payment',function(req,res){
+  var user_name=req.body.user;
+  var email=req.body.email;
+  
+  var jstr = JSON.stringify(data);
+  var jo = JSON.parse(jstr);
+  
+  console.log("From Client pOST request: User name = "+user_name+" and email is "+email);
+  // res.end("From Client pOST request: User name = "+user_name+" and email is "+email);
+  res.send({redirect: '/'});
+});
+
+app.get('/payment',function(req,res){
+
+});
+
 
 app.get('/shopdata', function(req, res, next) {
    fs.readFile(path.join(__dirname,'public/ajax/products.json'), 'utf8', function(err, data){
@@ -46,6 +62,49 @@ app.get('/shopdata', function(req, res, next) {
     //res.end(JSON.stringify(data));
   })
 });
+
+// searching
+app.get('/searching', function(req, res){
+     var val = req.query.search;
+     var search_result;
+     console.log(val);
+
+     var state = [];
+     var result = JSON.parse(fs.readFileSync(path.join(__dirname,'public/ajax/products.json'), 'utf8'));
+
+     //fs.readFile(path.join(__dirname,'public/ajax/products.json'), 'utf8', function(err, data){
+     //   if (err) throw err;
+     // console.log(result);
+
+     for (var i in result) {
+      
+      if (result[i].name.toLowerCase().indexOf(val) != -1 || result[i].snippet.search(val)>=0) {
+      //if (result[i].name.search(val)>=0 || result[i].snippet.search(val)>=0) {
+        //state.push({name:result[i].name, price:result[i].price});
+        state.push(result[i]);
+        }
+     
+    }
+    console.log(state);
+    res.send(state);
+        
+        // var result = JSON.parse(data);
+        /*console.log(result[0]['name']);
+        if (val!='Motorola') {
+          search_result = "No results found. Try again.";
+        } else {
+          search_result = result[0]['name'];
+        }
+
+        res.send(search_result);*/
+        // res.send(result[0]['name']);
+
+    //res.end(JSON.stringify(data));
+ // })
+
+     // testing the route
+     // res.send("WHEEE");
+    });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

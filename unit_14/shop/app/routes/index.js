@@ -6,6 +6,10 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.post('/', function(req, res, next) {
+  res.render('index', { title: 'Express' });
+});
+
 router.get('/shop', function(req, res, next) {
    res.render('catalog', { title: 'Shopping Express' });
 });

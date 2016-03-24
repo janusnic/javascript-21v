@@ -31,6 +31,12 @@ html
       <div class="popup-box">
       <h2>Title of Popup</h2>
       <h3>A sub-heading for the popup with a little description.</h3>
+      <form method="post" id='payform'>
+      <input type="text" name="user">
+      <input type="text" name="email">
+      </form>
+      
+      <button id='pay-button'>Pay Now</button>
       <a class="close-btn popup-close" href="#">x</a>
       </div>
       </div>
@@ -83,6 +89,7 @@ html
           a(class='cart-link' href='#')
             span(class='cart-text fontawesome-shopping-cart')
             span Cart
+          input#search(type="search", placeholder="Search Catalog")
           
           #cart
             span.empty No items in cart.

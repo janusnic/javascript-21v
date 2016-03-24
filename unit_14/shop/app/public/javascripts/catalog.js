@@ -37,198 +37,20 @@ function go_to_page(page_num){
     $('#current_page').val(page_num);
 }
 
-
 $(document).ready(function () {
     
     var $shop = $('#grid');
+
     var url = "/shopdata";
- 
+
+
     //how much items per page to show
     var show_per_page = 8; 
     var number_of_items;
 
     var $cart = $('.cart-items');
 
-        $.ajax({
-          url: url,
-          async: false,
-          dataType: 'json',
-          success: function (data) {
-            //getting the amount of elements inside grid div
-            number_of_items = data.length;
-          }
-        })
-          .done(function( data ) {  
-          $.each( data, function( i, item ) {
-            var  itemName = item['name'],
-               itemSku = item['sku'],
-               itemDescription = item['snippet'], 
-               itemPrice = item['price'], 
-               itemDiscontPrice = item['discont'], 
-               itemImg = item['impriceUrl'], 
-               itemId = item['id'];
-                        
-                        $template = $($('#productTemplate').html());
-                        $template.find('h4').text(itemName);
-                        $template.find('.sku strong').text(itemSku);
-                        $template.find('p').text(itemDescription);
-                        $template.find('.price-big').text('$' + itemPrice);
-                        $template.find('.product_price').text('$' + itemPrice*(100-itemDiscontPrice)/100);
-                        $template.find('.product_name').text(itemName);
-                        $template.find('img').attr('src',itemImg[0]);
-
-                        $template.data('id', itemId);
-                        $template.data('name', itemName);
-                        $template.data('price', itemPrice);
-                        $template.data('image', itemImg[0]);
-
-                        //carousel-container
-
-                        for (var j=0; j<itemImg.length;j++) {
-                            var caruselImg = $("<img></img>").attr('src',itemImg[j]);  
-                            var caruselLi = $("<li></li>").append(caruselImg);  
-                            $template.find('.carousel-container').append(caruselLi);
-                        }
-                        
-                        
-                        if (itemDiscontPrice > 0 && itemDiscontPrice < 30 ) {
-                        $template.find('#banner').addClass('ribbon top-left ribbon-primary').addClass('bestprice').html('<small>Best price</small>');
-                        }
-                        if (itemDiscontPrice >= 30 ) {
-                        $template.find('#banner ').addClass('ribbon top-left ribbon-primary sale').html('<small>Sale!</small>');
-                        }
-                        $shop.append($template);
-                        
-       })
-       
-   });
-    
-    
-    //calculate the number of pages we are going to have
-    var number_of_pages = Math.ceil(number_of_items/show_per_page);
-    
-    //set the value of our hidden input fields
-    $('#current_page').val(0);
-    $('#show_per_page').val(show_per_page);
-    
-    //now when we got all we need for the navigation let's make it '
-    
-    /* 
-    what are we going to have in the navigation?
-        - link to previous page
-        - links to specific pages
-        - link to next page
-    */
-    var navigation_html = '<a class="previous_link" href="javascript:previous();">Prev</a>';
-    var current_link = 0;
-    while(number_of_pages > current_link){
-        navigation_html += '<a class="page_link" href="javascript:go_to_page(' + current_link +')" longdesc="' + current_link +'">'+ (current_link + 1) +'</a>';
-        current_link++;
-    }
-    navigation_html += '<a class="next_link" href="javascript:next();">Next</a>';
-    
-    $('#page_navigation').html(navigation_html);
-    
-    //add active_page class to the first page link
-    $('#page_navigation .page_link:first').addClass('active_page');
-    
-    //hide all the elements inside grid div
-    $('#grid').children().css('display', 'none');
-    
-    //and show the first n (show_per_page) elements
-    $('#grid').children().slice(0, show_per_page).css('display', 'block');
-    
-    $('.largeGrid').click(function () {
-        $(this).find('a').addClass('active');
-        $('.smallGrid a').removeClass('active');
-        $('.product').addClass('large').each(function () {
-        });
-        setTimeout(function () {
-            $('.info-large').show();
-        }, 200);
-        return false;
-    });
-    $('.smallGrid').click(function () {
-        $(this).find('a').addClass('active');
-        $('.largeGrid a').removeClass('active');
-        $('div.product').removeClass('large');
-        $('.make3D').removeClass('animate');
-        $('.info-large').fadeOut('fast');
-        setTimeout(function () {
-            $('div.flip-back').trigger('click');
-        }, 400);
-        return false;
-    });
-    $('.smallGrid').click(function () {
-        $('.product').removeClass('large');
-        return false;
-    });
-    $('.colors-large a').click(function () {
-        return false;
-    });
-
-    $('.product').each(function (i, el) {
-        $(el).find('.make3D').hover(function () {
-            $(this).parent().css('z-index', '20');
-            $(this).addClass('animate');
-            $(this).find('div.carouselNext, div.carouselPrev').addClass('visible');
-        }, function () {
-            $(this).removeClass('animate');
-            $(this).parent().css('z-index', '1');
-            $(this).find('div.carouselNext, div.carouselPrev').removeClass('visible');
-        });
-        $(el).find('.view_gallery').click(function () {
-            $(el).find('div.carouselNext, div.carouselPrev').removeClass('visible');
-            $(el).find('.make3D').addClass('flip-10');
-            setTimeout(function () {
-                $(el).find('.make3D').removeClass('flip-10').addClass('flip90').find('div.shadow').show().fadeTo(80, 1, function () {
-                    $(el).find('.product-front, .product-front div.shadow').hide();
-                });
-            }, 50);
-            setTimeout(function () {
-                $(el).find('.make3D').removeClass('flip90').addClass('flip190');
-                $(el).find('.product-back').show().find('div.shadow').show().fadeTo(90, 0);
-                setTimeout(function () {
-                    $(el).find('.make3D').removeClass('flip190').addClass('flip180').find('div.shadow').hide();
-                    setTimeout(function () {
-                        $(el).find('.make3D').css('transition', '100ms ease-out');
-                        $(el).find('.cx, .cy').addClass('s1');
-                        setTimeout(function () {
-                            $(el).find('.cx, .cy').addClass('s2');
-                        }, 100);
-                        setTimeout(function () {
-                            $(el).find('.cx, .cy').addClass('s3');
-                        }, 200);
-                        $(el).find('div.carouselNext, div.carouselPrev').addClass('visible');
-                    }, 100);
-                }, 100);
-            }, 150);
-        });
-        $(el).find('.flip-back').click(function () {
-            $(el).find('.make3D').removeClass('flip180').addClass('flip190');
-            setTimeout(function () {
-                $(el).find('.make3D').removeClass('flip190').addClass('flip90');
-                $(el).find('.product-back div.shadow').css('opacity', 0).fadeTo(100, 1, function () {
-                    $(el).find('.product-back, .product-back div.shadow').hide();
-                    $(el).find('.product-front, .product-front div.shadow').show();
-                });
-            }, 50);
-            setTimeout(function () {
-                $(el).find('.make3D').removeClass('flip90').addClass('flip-10');
-                $(el).find('.product-front div.shadow').show().fadeTo(100, 0);
-                setTimeout(function () {
-                    $(el).find('.product-front div.shadow').hide();
-                    $(el).find('.make3D').removeClass('flip-10').css('transition', '100ms ease-out');
-                    $(el).find('.cx, .cy').removeClass('s1 s2 s3');
-                }, 100);
-            }, 150);
-        });
-        makeCarousel(el);
-    });
-    
-    // calculate Total
-
-    var quantity = 0;
+        var quantity = 0;
     var $matched = null;
 
     function calculateSubtotal($item) {
@@ -297,9 +119,71 @@ $(document).ready(function () {
         $('.taxes span').text('($' + (Math.round(subtotal * 5) / 100).toFixed(2) + ') ');
     }
 
-    
 
-    $('.add_to_cart').click(function () {
+
+    function eachProduct(){
+        $('.product').each(function (i, el) {
+        $(el).find('.make3D').hover(function () {
+            $(this).parent().css('z-index', '20');
+            $(this).addClass('animate');
+            $(this).find('div.carouselNext, div.carouselPrev').addClass('visible');
+        }, function () {
+            $(this).removeClass('animate');
+            $(this).parent().css('z-index', '1');
+            $(this).find('div.carouselNext, div.carouselPrev').removeClass('visible');
+        });
+        $(el).find('.view_gallery').click(function () {
+            $(el).find('div.carouselNext, div.carouselPrev').removeClass('visible');
+            $(el).find('.make3D').addClass('flip-10');
+            setTimeout(function () {
+                $(el).find('.make3D').removeClass('flip-10').addClass('flip90').find('div.shadow').show().fadeTo(80, 1, function () {
+                    $(el).find('.product-front, .product-front div.shadow').hide();
+                });
+            }, 50);
+            setTimeout(function () {
+                $(el).find('.make3D').removeClass('flip90').addClass('flip190');
+                $(el).find('.product-back').show().find('div.shadow').show().fadeTo(90, 0);
+                setTimeout(function () {
+                    $(el).find('.make3D').removeClass('flip190').addClass('flip180').find('div.shadow').hide();
+                    setTimeout(function () {
+                        $(el).find('.make3D').css('transition', '100ms ease-out');
+                        $(el).find('.cx, .cy').addClass('s1');
+                        setTimeout(function () {
+                            $(el).find('.cx, .cy').addClass('s2');
+                        }, 100);
+                        setTimeout(function () {
+                            $(el).find('.cx, .cy').addClass('s3');
+                        }, 200);
+                        $(el).find('div.carouselNext, div.carouselPrev').addClass('visible');
+                    }, 100);
+                }, 100);
+            }, 150);
+        });
+        $(el).find('.flip-back').click(function () {
+            $(el).find('.make3D').removeClass('flip180').addClass('flip190');
+            setTimeout(function () {
+                $(el).find('.make3D').removeClass('flip190').addClass('flip90');
+                $(el).find('.product-back div.shadow').css('opacity', 0).fadeTo(100, 1, function () {
+                    $(el).find('.product-back, .product-back div.shadow').hide();
+                    $(el).find('.product-front, .product-front div.shadow').show();
+                });
+            }, 50);
+            setTimeout(function () {
+                $(el).find('.make3D').removeClass('flip90').addClass('flip-10');
+                $(el).find('.product-front div.shadow').show().fadeTo(100, 0);
+                setTimeout(function () {
+                    $(el).find('.product-front div.shadow').hide();
+                    $(el).find('.make3D').removeClass('flip-10').css('transition', '100ms ease-out');
+                    $(el).find('.cx, .cy').removeClass('s1 s2 s3');
+                }, 100);
+            }, 150);
+        });
+        makeCarousel(el);
+    });
+    }
+
+    function addToCart(){
+        $('.add_to_cart').click(function () {
         
         var items = $cart.children(),
         $template = $($('#cartItem').html()),
@@ -365,8 +249,10 @@ $(document).ready(function () {
             }, 10);
         }, 1000);
     });
+    }
 
-    $('.add-cart-large').each(function (i, el) {
+    function addToCartLarge(){
+        $('.add-cart-large').each(function (i, el) {
 
         $(el).click(function () {
 
@@ -440,6 +326,9 @@ $(document).ready(function () {
             }, 1000);
         });
     });
+
+    }
+
 
     function makeCarousel(el) {
         var carousel = $(el).find('.carousel ul');
@@ -522,6 +411,181 @@ $(document).ready(function () {
             $('.popup-box').removeClass('transform-in').addClass('transform-out');
             e.preventDefault();
         });
+    
+       $('#pay-button').click(function(){
+        console.log($('#payform').serialize());
+        $.ajax(
+                { 
+                    url: '/payment',
+                    method: 'POST',
+                    
+                    data: $('#payform').serialize(),
+                    dataType: 'json',
+                    success: function (data, textStatus, jqXHR) {
+                        if (typeof data.redirect == 'string'){
+                    
+                                 location = data.redirect;
+                             }
+                      }
+              
+                });
+        });
+
     });
+
+    function eachData(data){
+
+         $.each( data, function( i, item ) {
+            var  itemName = item['name'],
+               itemSku = item['sku'],
+               itemDescription = item['snippet'], 
+               itemPrice = item['price'], 
+               itemDiscontPrice = item['discont'], 
+               itemImg = item['impriceUrl'], 
+               itemId = item['id'];
+                        
+                        var $template = $($('#productTemplate').html());
+                        $template.find('h4').text(itemName);
+                        $template.find('.sku strong').text(itemSku);
+                        $template.find('p').text(itemDescription);
+                        $template.find('.price-big').text('$' + itemPrice);
+                        $template.find('.product_price').text('$' + itemPrice*(100-itemDiscontPrice)/100);
+                        $template.find('.product_name').text(itemName);
+                        $template.find('img').attr('src',itemImg[0]);
+
+                        $template.data('id', itemId);
+                        $template.data('name', itemName);
+                        $template.data('price', itemPrice);
+                        $template.data('image', itemImg[0]);
+
+                        for (var j=0; j<itemImg.length;j++) {
+                            var caruselImg = $("<img></img>").attr('src',itemImg[j]);  
+                            var caruselLi = $("<li></li>").append(caruselImg);  
+                            $template.find('.carousel-container').append(caruselLi);
+                        }
+                        if (itemDiscontPrice > 0 && itemDiscontPrice < 30 ) {
+                        $template.find('#banner').addClass('ribbon top-left ribbon-primary').addClass('bestprice').html('<small>Best price</small>');
+                        }
+                        if (itemDiscontPrice >= 30 ) {
+                        $template.find('#banner ').addClass('ribbon top-left ribbon-primary sale').html('<small>Sale!</small>');
+                        }
+                        $shop.append($template);
+       })
+    }
+
+
+        $.ajax({
+          url: url,
+          async: false,
+          dataType: 'json',
+          success: function (data) {
+
+            number_of_items = data.length;
+          }
+        })
+          .done(function( data ) {  
+              eachData(data);
+           });
+
+
+        $('#search').on('keyup', function(e){
+            if(e.keyCode === 13) {
+               //var parameters = {search: $(this).val() };
+           
+               $shop.empty();
+            
+            $.ajax({
+              url: '/searching',
+              async: false,
+              data: {search: $(this).val() },
+              dataType: 'json',
+              success: function (data) {
+                
+                number_of_items = data.length;
+                }
+              }).done( function( data ) {  
+                    eachData(data);
+                         }
+                );
+
+        eachProduct();
+        addToCart();
+        addToCartLarge();
+
+        console.log('number_of_items = ',number_of_items);
+
+            };
+        });         
+  
+    
+    //calculate the number of pages we are going to have
+    
+    var number_of_pages = Math.ceil(number_of_items/show_per_page);
+    
+    //set the value of our hidden input fields
+    $('#current_page').val(0);
+    $('#show_per_page').val(show_per_page);
+    
+    //now when we got all we need for the navigation let's make it '
+    
+    /* 
+    what are we going to have in the navigation?
+        - link to previous page
+        - links to specific pages
+        - link to next page
+    */
+    var navigation_html = '<a class="previous_link" href="javascript:previous();">Prev</a>';
+    var current_link = 0;
+    while(number_of_pages > current_link){
+        navigation_html += '<a class="page_link" href="javascript:go_to_page(' + current_link +')" longdesc="' + current_link +'">'+ (current_link + 1) +'</a>';
+        current_link++;
+    }
+    navigation_html += '<a class="next_link" href="javascript:next();">Next</a>';
+    
+    $('#page_navigation').html(navigation_html);
+    
+    //add active_page class to the first page link
+    $('#page_navigation .page_link:first').addClass('active_page');
+    
+    //hide all the elements inside grid div
+    $('#grid').children().css('display', 'none');
+    
+    //and show the first n (show_per_page) elements
+    $('#grid').children().slice(0, show_per_page).css('display', 'block');
+    
+    $('.largeGrid').click(function () {
+        $(this).find('a').addClass('active');
+        $('.smallGrid a').removeClass('active');
+        $('.product').addClass('large').each(function () {
+        });
+        setTimeout(function () {
+            $('.info-large').show();
+        }, 200);
+        return false;
+    });
+    $('.smallGrid').click(function () {
+        $(this).find('a').addClass('active');
+        $('.largeGrid a').removeClass('active');
+        $('div.product').removeClass('large');
+        $('.make3D').removeClass('animate');
+        $('.info-large').fadeOut('fast');
+        setTimeout(function () {
+            $('div.flip-back').trigger('click');
+        }, 400);
+        return false;
+    });
+    $('.smallGrid').click(function () {
+        $('.product').removeClass('large');
+        return false;
+    });
+    $('.colors-large a').click(function () {
+        return false;
+    });
+    
+    eachProduct();
+    addToCart();
+    addToCartLarge();
+
+
 
 });
