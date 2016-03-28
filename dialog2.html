@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html class=''>
+<head>
+
+<meta charset='UTF-8'>
+
+<link rel='stylesheet prefetch' href='js/jquery-ui.css'>
+<style>
+
+.flip-container {
+    -webkit-perspective: 1000;
+            -moz-perspective: 1000;
+            perspective: 1000;
+  position:relative;
+}
+    .flip-container.flip .flipper {
+                -webkit-transform: rotateY(180deg);
+                -moz-transform: rotateY(180deg);
+                transform: rotateY(180deg);
+            }
+
+.flip-container, .front, .back {
+    width: 320px;
+    height: 480px;
+}
+
+.flipper {
+            -webkit-transition: 0.6s;
+            -webkit-transform-style: preserve-3d;
+
+            -moz-transition: 0.6s;
+            -moz-transform-style: preserve-3d;
+
+            transition: 0.6s;
+            transform-style: preserve-3d;
+
+            position: relative;
+}
+.front, .back {
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            backface-visibility: hidden;
+
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .front {
+            z-index: 2;
+        }
+
+        .back {
+            -webkit-transform: rotateY(180deg);
+            -moz-transform: rotateY(180deg);
+            transform: rotateY(180deg);
+        }</style></head><body>
+<body>
+    <div class="flip-container">
+        <div class="flipper"> 
+            <div class="front">  
+            </div>
+            <div class="back">  
+            </div>
+        </div>
+    </div>
+<div id="dialogfront">
+    Adelante
+    <a id="flip" href="#" > girar </a>
+</div>
+    <div id="dialogback">
+    Atras
+    <a id="flip" href="#" > girar </a>
+</div>
+</body>
+
+
+<script src='js/jquery.min.js'></script>
+<script src='js/jquery-ui.min.js'></script>
+<script>
+var front = true;
+$(document).ready(function () {
+    $('#dialogfront').dialog({
+        create: function (event, ui) {
+            $(this).dialog('widget').addClass('frontui').appendTo('.front');
+        }
+    });
+    $('#dialogback').dialog({
+        create: function (event, ui) {
+            $(this).dialog('widget').addClass('backui').appendTo('.back');
+        }
+    });
+    var top = 0;
+    var left = 0;
+    $('body').on('click', '#flip', function (e) {
+        e.preventDefault();
+        if (front) {
+            top = $('.frontui').css('top');
+            left = $('.frontui').css('left');
+        } else {
+            top = $('.backui').css('top');
+            left = $('.backui').css('left');
+        }
+        $('.flip-container').css({
+            top: top,
+            left: left
+        });
+        $('.ui-dialog').css({
+            top: 0,
+            left: 0
+        });
+        front = !front;
+        $('.flip-container').toggleClass('flip');
+        setTimeout(function () {
+            $('.ui-dialog').css({
+                top: top,
+                left: left
+            });
+            $('.flip-container').css({
+                top: 0,
+                left: 0
+            });
+        }, 600);
+    });
+});
+
+</script>
+
+</body></html>
+
+

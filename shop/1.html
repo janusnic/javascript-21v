@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html class=''>
+<head>
+
+<meta charset='UTF-8'>
+
+<script src="js/modernizr.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700' rel='stylesheet' type='text/css'>
+<link rel='stylesheet prefetch' href='css/reset.css'>
+<link rel='stylesheet prefetch' href='css/jquery-ui.css'>
+<link rel='stylesheet' href='css/admin.css'>
+<style>
+
+</style></head><body>
+<script type="text/template" id='productListTemplate'>
+  
+  <li id="productHolder">  
+      <div class="product-date-holder">
+        <span id="dateNumber">23</span>
+        <span id="dateDay">Jan</span>
+      </div>
+      <div class="product-details-holder">
+        <h1></h1>
+        <span id="productPrice"></span>
+        <span id="productQuantity"></span>
+          <ul id="editTools">
+             <li><i class="fa fa-pencil-square-o"></i></li>
+             <li><i class="fa fa-bars"></i></li>
+             <li><i class="fa fa-times" id="removeproduct"></i></li>
+          </ul>
+      </div>
+    </li>
+
+</script>
+
+<div class="container">
+  
+  <div id="newproductHolder">
+    <span><i class="fa fa-plus"></i> Add New product</span>
+  </div>
+  
+  <div id="newProductForm">
+    <label for="product-date">Date:</label>
+    <input type="text" id="productDate">
+    <label for="product-title">Product Title</label>
+    <input type="text" name="product-title" id="productTitleInput" maxlength="80"/>
+    <label for="product-category">Product Category</label>
+    <input type="text" name="product-category" id="productCategoryInput" maxlength="80"/>
+    <label for="product-price">Product Price</label>
+    <input type="number" name="product-price" id="productPriceInput" value=0 />
+    <label for="product-discont">Product Discont</label>
+    <input type="number" name="product-discont" id="productDiscontInput" value=0 />
+    <label for="product-quantity">Product Quantity</label>
+    <input type="number" name="product-quantity" id="productQuantityInput" value=0 />
+    <label for="product-description">Description</label>
+    <textarea name="product-descripton" id="productDescriptionInput">Product Description</textarea>
+    <button name="add-product" id="addproduct">Add New product</button>
+    <button name="cancel-add-product" id="cancelAddproduct">Cancel</button>
+  </div>
+  
+  <ul id="upcomingproducts">
+
+    
+  </ul>
+</div>
+
+
+<script src='js/jquery.min.js'></script>
+<script src='js/jquery-ui.min.js'></script>
+<script>
+var products = [
+    {
+        "id": 0,
+        "sku": 100001,
+        "date": "03/28/2016",
+        "category": "smartphone",
+        "discont": 30,
+        "price": 1231,
+        "quantity": 30,
+        "impriceUrl": ["/images/1.jpg","/images/3.jpg","/images/4.jpg","/images/5.jpg"],
+        "name": "Motorola XOOM\u2122 with Wi-Fi",
+        "snippet": "The Next, Next Generation\r\n\r\nExperience the future with Motorola XOOM with Wi-Fi, the world's first tablet powered by Android 3.0 (Honeycomb)."
+    },
+    {
+        "id": 1,
+        "sku": 100002,
+        "date": "02/28/2016",
+        "category": "smartphone",
+        "discont": 10,
+        "price": 2231,
+        "quantity": 20,
+        "impriceUrl": ["/images/2.jpg","/images/3.jpg","/images/4.jpg","/images/5.jpg"],
+        "name": "MOTOROLA XOOM\u2122",
+        "snippet": "The Next, Next Generation\n\nExperience the future with MOTOROLA XOOM, the world's first tablet powered by Android 3.0 (Honeycomb)."
+    },
+    {
+        "id": 2,
+        "sku": 100004,
+        "date": "02/28/2016",
+        "category": "smartphone",
+        "discont": 20,
+        "price": 1131,
+        "quantity": 10,
+        "impriceUrl": ["/images/6.jpg","/images/3.jpg","/images/4.jpg","/images/5.jpg"],
+        "name": "MOTOROLA\u2122",
+        "snippet": "The Next, Next Generation\n\nExperience the future with MOTOROLA XOOM, the world's first tablet powered by Android 3.0 (Honeycomb)."
+    }
+    ];
+
+var newproductHolder = document.getElementById('newproductHolder');
+var productForm = document.getElementById('newProductForm');
+var productDate = document.getElementById('productDate');
+var addproduct = document.getElementById('addproduct');
+var cancel = document.getElementById('cancelAddproduct');
+var upcomingproducts = document.getElementById('upcomingproducts');
+var productHolder = document.getElementById('productHolder');
+var removeproduct = document.getElementById('removeproduct');
+
+
+var $list = $('#upcomingproducts');
+
+      function init(data) {  
+          $.each( data, function( i, item ) {
+            var  itemName = item['name'],
+               itemSku = item['sku'],
+               itemDescription = item['snippet'], 
+               itemPrice = item['price'], 
+               itemQuantity = item['quantity'], 
+               itemDiscontPrice = item['discont'], 
+               itemImg = item['impriceUrl'], 
+               itemId = item['id'];
+                        
+                        $template = $($('#productListTemplate').html());
+                        $template.find('h1').text(itemName);
+
+                        $template.find('#productPrice').text(itemPrice);
+                        $template.find('#productQuantity').text(itemQuantity);
+
+                        $list.append($template);
+       });
+       
+   }
+init(products);
+
+$(newproductHolder).click(function () {
+    $(productForm).slideDown(400);
+});
+$(productDate).datepicker();
+
+$(cancel).click(function () {
+    $(productForm).slideUp(400);
+});
+
+</script>
+
+</body></html>
+

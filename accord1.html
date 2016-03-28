@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html class=''>
+<head>
+
+<meta charset='UTF-8'>
+
+<style>
+body {
+  margin:0;
+  font-family: Calibri;
+  background: #eee;
+}
+.content {
+  margin:105px auto;
+  width:700px;
+}
+h1{
+  font-size:30px;
+  color:#e06666;
+  text-align:center;
+  margin-bottom:40px;
+}
+#accordion h4{
+  margin:5px 0 0;
+  padding:15px;
+  font-family: "Helvetica Neue", Helvetica,  sans-serif;
+  font-size:20px;
+  font-weight:normal;
+  text-align:center;
+  color:#fff;
+  background:#36424a;
+  outline: 0;
+  cursor:pointer;
+  
+}
+
+#accordion h4:hover {
+  background:#555;
+}
+
+#accordion div {
+  position:relative;
+  margin:0 0 0;
+  padding:15px;
+  color:#fff;
+  background:#e06666;
+}
+
+#accordion div:after {
+position: absolute;
+top: -27px;
+left: 45px;
+display: block;
+width: 0;
+height: 0;
+margin-left: -20px;
+border-width: 15px;
+border-style: solid;
+border-color: transparent transparent  #e06666  transparent;
+content: '';
+}</style></head><body>
+<div class="content">
+  <h1>JQuery UI Accordion</h1>
+<div id="accordion">
+  <h4>Setunggal</h4>
+  <div>
+    <p>
+    Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
+    ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
+    amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
+    odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
+    </p>
+  </div>
+  <h4>Kalih</h4>
+  <div>
+    <p>
+    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
+    purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
+    velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+    suscipit faucibus urna.
+    </p>
+  </div>
+  <h4>Tigo</h4>
+  <div>
+    <p>
+    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
+    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
+    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
+    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
+    </p>
+  </div>
+  <h4>Sekawan</h4>
+  <div>
+    <p>
+    Cras dictum. Pellentesque habitant morbi tristique senectus et netus
+    et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in
+    faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia
+    mauris vel est.
+    </p>
+  </div>
+</div>
+</div>
+
+<script src='js/jquery.min.js'></script>
+
+<script src='js/jquery-ui.js'></script>
+<script>
+$(function () {
+    $('#accordion').accordion({
+        collapsible: true,
+        heightStyle: 'content'
+    });
+});
+
+</script>
+</body></html>

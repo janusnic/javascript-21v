@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html class=''>
+<head>
+
+<meta charset='UTF-8'>
+
+
+<script src='js/prefixfree.min.js'></script>
+<link rel='stylesheet prefetch' href='js/jquery-ui.css'>
+<style>
+
+body {
+  padding:10px;
+}
+.wrapper {
+  width:400px;
+}
+ul {
+  list-style-type:none;
+  padding:0;
+  margin:0;
+}
+.slider {
+  width:400px;
+  height:200px;
+  margin-bottom:10px;
+  position:relative;
+}
+.slider li {
+  position:absolute;
+  top:0;
+  left:0;
+  display:none;
+}
+.slider li:first-child {
+  display:block;
+}</style></head><body>
+<!-- .wrapper -->
+<div class="wrapper">
+  <!-- .slider -->
+  <div class="slider">
+    <ul>
+      <li><img src="images/1.jpg" alt=""></li>
+      <li><img src="images/2.jpg" alt=""></li>
+      <li><img src="images/3.jpg" alt=""></li>
+      <li><img src="images/4.jpg" alt=""></li>
+      <li><img src="images/5.jpg" alt=""></li>
+      <li><img src="images/6.jpg" alt=""></li>
+      <li><img src="images/7.jpg" alt=""></li>
+    </ul>
+  </div>
+  <!-- /.slider -->
+  <div class="slider_control"></div>
+</div>
+<!-- /.wrapper -->
+
+<script src='js/jquery.min.js'></script>
+<script src='js/jquery-ui.min.js'></script>
+<script>
+$(function () {
+    $('.slider_control').slider({
+        min: 1,
+        max: $('.slider li').length,
+        step: 1,
+        animate: 'fast',
+        slide: function (event, ui) {
+            $('.slider li:visible').fadeOut();
+            $('.slider li:nth-child(' + ui.value + ')').fadeIn();
+        }
+    });
+});
+
+</script>
+
+</body></html>
