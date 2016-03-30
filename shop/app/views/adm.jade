@@ -1,0 +1,38 @@
+doctype html
+html
+  head
+    title= title
+    script(src='/javascripts/modernizr.js' type='text/javascript')
+    link(rel='stylesheet prefetch' href='/stylesheets/reset.css')
+    link(href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css')
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css")
+    link(rel='stylesheet prefetch' href='/stylesheets/jquery-ui.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet' href='/stylesheets/admin.css')
+
+    
+    script(src='/javascripts/prefixfree.min.js')
+    script(src='/javascripts/jquery.min.js')
+    script(src='/javascripts/jquery-ui.min.js')
+    script(src='/javascripts/admin.js')
+    script(type="text/template" id='productListTemplate').
+        <li id="productHolder" class='productHolder'>  
+          <div class="product-date-holder">
+            <span id="dateNumber">23</span>
+            <input type="hidden" id="idItem" value="">
+            <span id="dateDay">Jan</span>
+          </div>
+          <div class="product-details-holder">
+            <h1></h1>
+            <span id="productPrice"></span>
+            <span id="productQuantity"></span>
+              <ul id="editTools" class='editTools'>
+                 <li><i class="fa fa-pencil-square-o editproduct"></i></li>
+                 <li><i class="fa fa-bars"></i></li>
+                 <li><i class="fa fa-times removeproduct"></i></li>
+              </ul>
+          </div>
+        </li>
+   
+  body
+    block content

@@ -1,0 +1,34 @@
+extends adm
+
+block content
+  h1= title
+  div.container
+    div#newproductHolder
+      span 
+        i(class="fa fa-plus") Add New product
+  
+  
+    div#newProductForm
+      label(for="product-date") Date:
+      input(type="text" id="productDate")
+      label( for="product-title") Product Title
+      input(type="text" name="product-title" id="productTitleInput" maxlength="80")
+      label(for="product-category") Product Category
+      input(type="text" name="product-category" id="productCategoryInput" maxlength="80")
+      label(for="product-price") Product Price
+      input(type="number" name="product-price" id="productPriceInput" value=0)
+      label(for="product-discont") Product Discont
+      input(type="number" name="product-discont" id="productDiscontInput" value=0)
+      label(for="product-quantity") Product Quantity
+      input(type="number" name="product-quantity" id="productQuantityInput" value=0)
+      label(for="product-description") Description
+      textarea(name="product-descripton" id="productDescriptionInput") Product Description
+      button(name="add-product" id="addproduct") Add New product
+      button(name="edit-product" id="editproduct") Save product
+      button(name="save-product" id="saveproduct") Save All Chages
+      button(name="cancel-add-product" id="cancelAddproduct") Cancel
+  
+  
+    ul(id="upcomingproducts")
+
+ 

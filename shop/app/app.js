@@ -72,39 +72,31 @@ app.get('/searching', function(req, res){
      var state = [];
      var result = JSON.parse(fs.readFileSync(path.join(__dirname,'public/ajax/products.json'), 'utf8'));
 
-     //fs.readFile(path.join(__dirname,'public/ajax/products.json'), 'utf8', function(err, data){
-     //   if (err) throw err;
-     // console.log(result);
-
      for (var i in result) {
       
       if (result[i].name.toLowerCase().indexOf(val) != -1 || result[i].snippet.search(val)>=0) {
-      //if (result[i].name.search(val)>=0 || result[i].snippet.search(val)>=0) {
-        //state.push({name:result[i].name, price:result[i].price});
         state.push(result[i]);
         }
      
     }
     console.log(state);
     res.send(state);
-        
-        // var result = JSON.parse(data);
-        /*console.log(result[0]['name']);
-        if (val!='Motorola') {
-          search_result = "No results found. Try again.";
-        } else {
-          search_result = result[0]['name'];
-        }
-
-        res.send(search_result);*/
-        // res.send(result[0]['name']);
-
-    //res.end(JSON.stringify(data));
- // })
-
-     // testing the route
-     // res.send("WHEEE");
+      
     });
+
+app.post('/json',function(req,res){
+ // console.log("Output Content : \n"+ JSON.stringify(req.body));
+ var file = path.join(__dirname,'public/ajax/products.json');
+ fs.writeFile(file, JSON.stringify(req.body));
+});
+
+app.get('/json', function(req, res, next) {
+   fs.readFile(path.join(__dirname,'public/ajax/products.json'), 'utf8', function(err, data){
+   // console.log(data);
+    res.end(JSON.stringify(data));
+  })
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

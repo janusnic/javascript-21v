@@ -14,6 +14,10 @@ router.get('/shop', function(req, res, next) {
    res.render('catalog', { title: 'Shopping Express' });
 });
 
+router.get('/admin', function(req, res, next) {
+   res.render('admin', { title: 'Admin Shopping Express' });
+});
+
 router.get('/test1', function(req, res, next) {
   res.render('test1', { title: 'Express Ajax' });
 });
