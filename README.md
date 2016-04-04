@@ -1,498 +1,419 @@
-# javascript-21v unit 17
+# javascript-21v unit 18
 
-загрузка файлов на сервер Node.js с помощью JQuery Ajax
---------------------------------------------------------
-JQuery File Upload - http://blueimp.github.io/jQuery-File-Upload/
+Выделение: Range, TextRange и Selection
+=======================================
 
-будем использовать Bootstrap JQuery
------------------------------------
-upld.jade
----------
+Range
+-----
+Range. – это объект, соответствующий фрагменту документа, который может включать узлы и участки текста из этого документа.
 
-    doctype html
-    html(lang='ru')
-      head
-        meta(charset='utf-8')
-        meta(http-equiv='X-UA-Compatible' content='IE=edge')
-        meta(name='viewport' content='width=device-width, initial-scale=1')
-        meta(name='description' content="")
-        meta(name='author' content="xfakehopex")
-        title= title
-        link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
-        link(rel='stylesheet', href='/stylesheets/upload.css')
+DOM-реализация Range (кроме IE8-)
+---------------------------------
+Range состоит из двух граничных точек (boundary-points), соответствующих началу и концу области. Позиция любой граничной точки определяется в документе с помощью двух свойств: узел (node) и смещение (offset).
 
-        //HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries
-        | <!--[if lt IE 9]>
-        | <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        | <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        | <![endif]-->
-      body
-      body
-        .container
-          block content
-        script(src='/javascripts/jquery.min.js')
-        script(src='/javascripts/bootstrap.min.js')
-        block otherScripts
+Контейнером (container) называют узел, содержащий граничную точку. Сам контейнер и все его предки называются родительскими контейнерами (ancestor containers) для граничной точки. Родительский контейнер, включающий обе граничные точки, называют корневым контейнером (root container).
 
-upload.jade
+Если контейнер является текстовым узлом, то смещение определяется в символах от начала DOM-узла. Если контейнер является элементом (Document, DocumentFragment, Element…), то смещение определяется в дочерних узлах.
+
+Пример Range
+
+Объекты Range создаются с помощью вызова document.createRange(). Объект при этом создается пустой, и граничные точки нужно задать далее его методами setStart и setEnd. 
+
+
+        <div id="ex2">
+          <h2>Соз|даем объект Range</h2>
+          <p>От третье|го символа заголовка до десятого символа это абзаца.</p>
+        </div>
+
+        <button onclick="alert(domRangeCreate())">
+          Создать Range и вывести его текст
+        </button>
+
+        <script>
+          function domRangeCreate() {
+            // Найдем корневой контейнер
+            var root = document.getElementById('ex2');
+            // Найдем контейнеры граничных точек (в данном случае тестовые)
+            var start = root.getElementsByTagName('h2')[0].firstChild;
+            var end = root.getElementsByTagName('p')[0].firstChild;
+            if (root.createRange) {
+              // Создаем Range
+              var rng = root.createRange();
+              // Задаем верхнюю граничную точку, передав контейнер и смещение
+              rng.setStart(start, 3);
+              // Аналогично для нижней границы
+              rng.setEnd(end, 10);
+              // Теперь мы можем вернуть текст, который содержится в полученной области
+              return rng.toString();
+            } else {
+              return 'Вероятно, у вас IE8-, смотрите реализацию TextRange ниже';
+            }
+          }
+        </script>
+
+ 
+Свойство commonAncestorContainer 
+--------------------------------
+вернет ссылку на наиболее вложенный корневой контейнер.
+
+Свойство startContainer (endContainer) 
+--------------------------------------
+вернет ссылку на контейнер верхней (нижней) граничной точки.
+
+Свойство startOffset (endOffset) 
+--------------------------------
+вернет смещение для верхней (нижней) граничной точки.
+
+Свойство collapsed 
+------------------
+вернет true, если граничные точки имеют одинаковые контейнеры и смещение (false в противном случае).
+
+Метод setStart (setEnd)
+-----------------------
+задает контейнер (ссылка на узел) и смещение (целочисленное значение) для соответствующих граничных точек.
+
+Методы setStartBefore, setStartAfter, setEndBefore, setEndAfter 
+---------------------------------------------------------------
+принимают в качестве единственного аргумента ссылку на узел и устанавливают граничные точки в соот-ии с естественной границей переданного узла. Например:
+
+        <span id="s1">First</span>
+        <span id="s2">Second</span>
+
+        var rng = document.createRange();
+        // Установит верхнюю граничную точку по левой границе спана #s1
+        rng.setStartBefore(document.getElementById('s1'));
+        // Установит нижнюю граничную точку по правой границе спана #s2
+        rng.setEndAfter(document.getElementById('s2'));
+
+Методы selectNode и selectNodeContents 
+--------------------------------------
+позволяют создать объект Range по границам узла, ссылку на который они принимают в качестве единственного аргумента. При использовании selectNode передаваемый узел также войдет в Range, в то время как selectNodeContents создаст объект только из содержимого узла
+
+Метод collapse 
+--------------
+объединяет граничные точки объекта Range. В качестве единственного аргумента принимает булево значение (true – для объединения в верхней точке, false – в нижней). По-умолчанию true.
+
+Метод toString 
+--------------
+вернет текстовое содержимое объекта Range.
+
+Метод cloneContents 
+-------------------
+вернет копию содержимого объекта Range в виде фрагмента документа.
+
+Метод cloneRange 
+----------------
+вернет копию самого объекта Range.
+
+Метод deleteContents 
+--------------------
+удаляет всё содержимое объекта Range.
+
+Метод detach 
 ------------
+извлекает текущий объект из DOM, так что на него больше нельзя сослаться.
 
-      extends upld
+Метод insertNode 
+-----------------
+принимает в качестве единственного аргумента ссылку на узел (или фрагмент документа) и вставляет его в содержимое объекта Range в начальной точке.
 
-      block content
-        h1 File Uploads
-        hr
-        input(type='file',style='display: none', name='uploadFiles',id='uploadFiles',multiple)
-        div(style='margin-bottom:15px')
-          button.btn.btn-primary(id='addFilesButton') Add files
-          button.btn.btn-primary(id='uploadAllFilesButton', style='margin-left:5px') Upload All
-        div.progress
-          div#progress.progress-bar(role='progressbar', style='width: 0%')
-        table#files.table
+Метод extractContents 
+----------------------
+вырезает содержимое объекта Range и возвращает ссылку на полученный фрагмент документа.
+
+Метод surroundContents 
+----------------------
+помещает всё содержимое текущего объекта Range в новый родительский элемент, ссылка на который принимается в качестве единственного аргумента.
+
+Метод compareBoundaryPoints 
+---------------------------
+используется для сравнения граничных точек.
+
+Найдём в текстовом узле фразу и подсветим её синим фоном.
+----------------------------------------------------------
+        <div id="ex3">
+          Найдем в этом тексте слово "бабуля" и подсветим его синим фоном
+        </div>
+
+        <script>
+          function domRangeHighlight(text) {
+            // Получим текстовый узел
+            var root = document.getElementById('ex3').firstChild;
+            // и его содержимое
+            var content = root.nodeValue;
+            // Проверим есть ли совпадения с переданным текстом
+            if (~content.indexOf(text)) {
+              if (document.createRange) {
+                // Если есть совпадение, и браузер поддерживает Range, создаем объект
+                var rng = document.createRange();
+                // Ставим верхнюю границу по индексу совпадения,
+                rng.setStart(root, content.indexOf(text));
+                // а нижнюю по индексу + длина текста
+                rng.setEnd(root, content.indexOf(text) + text.length);
+                // Создаем спан с синим фоном
+                var highlightDiv = document.createElement('span');
+                highlightDiv.style.backgroundColor = 'blue';
+                // Обернем наш Range в спан
+                rng.surroundContents(highlightDiv);
+              } else {
+                alert( 'Вероятно, у вас IE8-' );
+              }
+            } else {
+              alert( 'Совпадений не найдено' );
+            }
+          }
+        </script>
 
 
-      block otherScripts
-        script(src='/javascripts/image.upload.js')
+Selection
+=========
+Получаем пользовательское выделение
+-----------------------------------
 
+        function getSelectionText() {
+          var txt = '';
+          if (txt = window.getSelection) // Не IE, используем метод getSelection
+            txt = window.getSelection().toString();
+          } else { // IE, используем объект selection
+            txt = document.selection.createRange().text;
+          }
+          return txt;
+        }
+Все браузеры, кроме IE8- поддерживают метод window.getSelection(), который возвращает объект, схожий с Range. У этого объекта есть точка начала выделения (anchor) и фокусная точка окончания (focus). Точки могут совпадать. 
 
-layout.jade
------------
-
-        #header
-          ul
-            li
-              a(href='') Home
-            li
-              a(href='') BRANDS
-            li
-              a(href='/upload') Upload
-            li
-              a#login(href='#') SingIn/SignUp
-            li
-              a(href='/admin') Admin
-
-index.js
---------
-
-      router.get('/upload', function(req, res, next) {
-        res.render('upload', { title: 'Express Ajax upload' });
-      });
-
-класс JSUploader
+Свойство anchorNode 
+-------------------
+вернет контейнер, в котором начинается выделение. началом выделения считается та граница, от которой вы начали выделение. То есть, если вы выделяете справа налево, то началом будет именно правая граница.
+Свойство anchorOffset 
+---------------------
+вернет смещение для начала выделения в пределах контейнера anchorNode.
+Свойства focusNode и focusOffset 
+--------------------------------
+работают аналогично для фокусных точек, то есть точек окончания выделения.
+Свойство rangeCount 
+-------------------
+возвращает число объектов Range, которые входят в полученное выделение. Это свойство полезно при использовании метода addRange.
+Метод getRangeAt 
+----------------
+принимает в качестве аргумента индекс объекта Range и возвращает сам объект. Если rangeCount == 1, то работать будет только getRangeAt(0). Таким образом, мы можем получить объект Range, полностью соответствующий текущему выделению.
+Метод collapse 
+--------------
+сворачивает выделение в точку (каретку). Методу можно передать в качестве первого аргумента узел, в который нужно поместить каретку.
+Метод extend 
+------------
+принимает в качестве аргументов ссылку на контейнер и смещение (parentNode, offset), и перемещает фокусную точку в это положение.
+Метод collapseToStart (collapseToEnd) 
+-------------------------------------
+перемещает фокусную (начальную) границу к начальной (фокусной), тем самым сворачивая выделение в каретку.
+Метод selectAllChildren 
+-----------------------
+принимает в качестве единственного аргумента ссылку на узел и добавляет всех его потомков в выделение.
+Метод addRange 
+--------------
+принимает в качестве аргумента объект Range и добавляет его в выделение. Таким образом можно увеличить количество объектов Range, число которых нам подскажет свойство rangeCount.
+Метод removeRange (removeAllRanges) 
+-----------------------------------
+удаляет переданный (все) объект Range из выделения.
+Метод toString 
+--------------
+вернет текстовое содержимое выделения.
+Снятие выделения
 ================
-        function JSUploader() {
-            this.allFiles = [];
-            var baseClass = this;
-
-            this.addFiles = function(files) {
-                $.each(files, function(i, file) {
-                    var temp = {file: file, progressTotal: 0, progressDone: 0, element: null, valid: false};
-
-                    temp.valid = (file.type == 'image/png'
-                        || file.type == 'image/jpeg'
-                        || file.type == 'image/jpg') && file.size / 1024 / 1024 < 2;
-
-                    temp.element = baseClass.attachFileToView(temp);
-                    baseClass.allFiles.unshift(temp);
-                });
-            };
-
-            this.uploadFile =  function(index) {
-                var file = baseClass.allFiles[index];
-
-                if(file.valid) {
-                    var data = new FormData();
-                    data.append('uploadFile', file.file);
-
-                    $.ajax({
-                        url: '/upload',
-                        data: data,
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        type: 'POST',
-                        success: function (response) {
-                            var message = file.element.find('td.message');
-                            if (response.status == 'ok') {
-                                message.html(response.text);
-                                file.element.find('button.uploadButton').remove();
-                            }
-                            else {
-                                message.html(response.errors);
-                            }
-                        },
-                        xhr: function () {
-                            var xhr = $.ajaxSettings.xhr();
-
-                            if (xhr.upload) {
-                                console.log('xhr upload');
-
-                                xhr.upload.onprogress = function (e) {
-                                    file.progressDone = e.position || e.loaded;
-                                    file.progressTotal = e.totalSize || e.total;
-                                    baseClass.updateFileProgress(index, file.progressDone, file.progressTotal, file.element);
-                                    baseClass.totalProgressUpdated();
-                                    console.log('xhr.upload progress: ' + file.progressDone + ' / ' + file.progressTotal + ' = ' + (Math.floor(file.progressDone / file.progressTotal * 1000) / 10) + '%');
-                                };
-                            }
-
-                            return xhr;
-                        }
-                    });
-                }
-            };
-
-            this.uploadAllFiles =  function() {
-                $.each(baseClass.allFiles, function(i, file) {
-                    baseClass.uploadFile(i);
-                });
-            };
-
-            this.updateFileProgress = function(index, done, total, view) {
-                var percent = (Math.floor(done/total*1000)/10);
-
-                var progress = view.find('div.progress-bar');
-
-                progress.width(percent + '%');
-                progress.html(percent + '%');
-            };
-
-            this.updateTotalProgress = function(done, total) {
-                var percent = (Math.floor(done/total*1000)/10);
-                $('#progress').width(percent + '%');
-                $('#progress').html(percent + '%');
-            };
-
-            this.totalProgressUpdated = function() {
-                var done = 0.0;
-                var total = 0.0;
-
-                $.each(baseClass.allFiles, function(i, file) {
-                    done += file.progressDone;
-                    total += file.progressTotal;
-                })
-
-                baseClass.updateTotalProgress(done, total);
-            };
-
-            this.attachFileToView = function(file) {
-                var row = $('<tr>');
-                row.hide();
-
-                var isValidType = (file.file.type == 'image/png'
-                    || file.file.type == 'image/jpeg'
-                    || file.file.type == 'image/jpg');
-
-                var isValidSize = file.file.size / 1024 / 1024 < 2;
-
-                //create preview
-                var preview = $('<td>');
-                preview.width('100px');
-                if(isValidType)
-                {
-                    var img = $('<img>');
-                    img.attr('class', 'img-fullsize');
-
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        img.attr('src', e.target.result);
-                    }
-                    reader.readAsDataURL(file.file);
-
-                    preview.append(img);
-                }
-
-                //create file info column
-                var fileInfo = $('<td>');
-                fileInfo.width('200px');
-
-                var fileName = $('<div>');
-                fileName.html(file.file.name);
-
-                var fileType = $('<div>');
-                fileType.html(file.file.type);
-
-                var fileSize = $('<div>');
-                var size = file.file.size;
-
-                if((file.file.size / 1024 / 1024) > 1.0) {
-                    fileSize.html(Math.floor(file.file.size / 1024 / 1024) + ' MB');
-                }
-                else if((file.file.size / 1024) > 1.0) {
-                    fileSize.html(Math.floor(file.file.size / 1024) + ' KB');
-                }
-                else {
-                    fileSize.html(file.file.size + ' bytes');
-                }
 
 
-                fileInfo.append(fileName);
-                fileInfo.append(fileType);
-                fileInfo.append(fileSize);
-
-                //create message column
-                var messageColumn = $('<td>');
-                messageColumn.attr('class', 'message');
-                messageColumn.width('200px');
-                if(!isValidType)
-                {
-                    messageColumn.html('Unsupported mimetype ' + file.file.type);
-                }
-                if(!isValidSize) {
-                    messageColumn.html(messageColumn.html() + 'File size is ' + Math.floor(file.file.size / 1024 / 1024) + ' MB. Limit is2 MB.');
-                }
-
-                //create progress
-                var progressColumn = $('<td>');
-                progressColumn.attr('style', 'vertical-align: middle;');
-                if(file.valid) {
-                    var progress = $('<div>');
-
-                    progress.attr('class', 'progress');
-
-                    var progressBar = $('<div>');
-                    progressBar.attr('class', 'progress-bar');
-                    progressBar.attr('role', 'progressbar');
-                    progressBar.html('0%');
-
-                    progress.append(progressBar);
-                    progressColumn.append(progress);
-                }
-
-                //create buttons
-                var button1 = $('<td>');
-                button1.attr('style', 'vertical-align: middle; width:50px');
-
-                var uploadButton = $('<button>');
-                uploadButton.attr('class', 'btn btn-primary uploadButton');
-                uploadButton.html('Upload');
-                uploadButton.click(function(){
-                    baseClass.uploadFile(row.index());
-                });
-                if(file.valid) {
-                    button1.append(uploadButton);
-                }
-
-                var button2 = $('<td>');
-                button2.width('50px');
-
-                var removeButton = $('<button>');
-                removeButton.attr('class', 'close');
-                removeButton.html('&times');
-                removeButton.click(function(){
-                    baseClass.allFiles.splice(row.index(), 1);
-                    row.fadeOut(300, function(){
-                        $(this).remove();
-                    });
-                });
-                button2.append(removeButton);
-
-                row.append(preview);
-                row.append(fileInfo);
-                row.append(messageColumn);
-                row.append(progressColumn);
-                row.append(button1);
-                row.append(button2);
-                row.fadeIn();
-
-                $('#files').prepend(row);
-
-                return row;
-            };
+        function clearSelection() {
+          try {
+            // современный объект Selection
+            window.getSelection().removeAllRanges();
+          } catch (e) {
+            // для IE8-
+            document.selection.empty();
+          }
         }
 
-        var uploader = new JSUploader();
-
-        $(document).ready(function()
-        {
-            $("#addFilesButton").click(function() {
-                $("#uploadFiles").replaceWith($("#uploadFiles").clone(true));
-                $("#uploadFiles").click();
-            });
-
-            $("#uploadAllFilesButton").click(function() {
-                uploader.uploadAllFiles();
-            });
-
-            $("#uploadFiles").change(function() {
-                var files = this.files;
-
-                uploader.addFiles(files);
-            });
-
-        });
+Javascript editor
+=================
 
 
-Отправка файла с помощью Ajax
------------------------------
-
-За загрузку отвечает класс JSUploader вот один из его методов uploadFile:
-
-      this.uploadFile =  function(index) {
-              //baseClass это this
-              var file = baseClass.allFiles[index];
-
-              //Создаем объек FormData
-              var data = new FormData();
-              //Добавлем туда файл
-              data.append('uploadFile', file.file);
-
-              //отсылаем с попощью Ajax
-              $.ajax({
-                  url: '/upload',
-                  data: data,
-                  cache: false,
-                  contentType: false,
-                  processData: false,
-                  type: 'POST',
-                  success: function(response) {
-                      var message = file.element.find('td.message');
-                      if(response.status == 'ok') {
-                          message.html(response.text);
-                          file.element.find('button.uploadButton').remove();
-                      }
-                      else {
-                          message.html(response.errors);
-                      }
-                  },
-                  xhr: function() {
-                      var xhr = $.ajaxSettings.xhr();
-
-                      if ( xhr.upload ) {
-                          console.log('xhr upload');
-
-                          xhr.upload.onprogress = function(e) {
-                              file.progressDone = e.position || e.loaded;
-                              file.progressTotal = e.totalSize || e.total;
-                              //обновляем прогресс для файла
-                              baseClass.updateFileProgress(index, file.progressDone, file.progressTotal, file.element);
-                              //обновляем общий прогресс
-                              baseClass.totalProgressUpdated();
-                          };
-                      }
-
-                      return xhr;
-                  }
-              });
-          };
-
-Обработка загрузки файлов
---------------------------
-Для загрузки файлов на сервер нам понадобиться модуль multiparty, который можно установить с помощью команды в консоле:
-
-    npm install multiparty
-
-Далее код который обрабатывает post и get запросы начальной страницы. Здесь мы отображаем форму загрузки и обрабатываем post запрос на загрузку файла.
-При окончание загрузки мы сообщаем клиенту что все хорошо или если есть ошибки, то отправить их. 
-
-index.js
----------
-
-        var express = require('express');
-
-        var router = express.Router(),
-        fs = require("fs"),
-        multiparty = require('multiparty');
-
-        /* GET home page. */
-        router.get('/', function(req, res, next) {
-          res.render('index', { title: 'Express' });
-        });
-
-        router.post('/', function(req, res, next) {
-          res.render('index', { title: 'Express' });
-        });
-
-        router.get('/shop', function(req, res, next) {
-           res.render('catalog', { title: 'Shopping Express' });
-        });
-
-        router.get('/admin', function(req, res, next) {
-           res.render('admin', { title: 'Admin Shopping Express' });
-        });
-
-        router.get('/upload', function(req, res, next) {
-          res.render('upload', { title: 'Express Ajax upload' });
-        });
-
-        //здесь происходит сама загрузка
-        router.post('/upload', function(req, res, next) {
-            // создаем форму
-            var form = new multiparty.Form();
-            //здесь будет храниться путь с загружаемому файлу, его тип и размер
-            var uploadFile = {uploadPath: '', type: '', size: 0};
-            //максимальный размер файла
-            var maxSize = 2 * 1024 * 1024; //2MB
-            //поддерживаемые типы(в данном случае это картинки формата jpeg,jpg и png)
-            var supportMimeTypes = ['image/jpg', 'image/jpeg', 'image/png'];
-            //массив с ошибками произошедшими в ходе загрузки файла
-            var errors = [];
-
-            //если произошла ошибка
-            form.on('error', function(err){
-                //если загружаемый файл существует удаляем его
-                if(fs.existsSync(uploadFile.path)) {
-                    fs.unlinkSync(uploadFile.path);
-                    console.log('error');
-                }
-            });
-
-            //если нет ошибок и все хорошо
-            form.on('close', function() {
-                //сообщаем что все хорошо
-                if(errors.length == 0) {
-                    res.send({status: 'ok', text: 'Success'});
-                }
-                else {
-                    //если загружаемый файл существует удаляем его
-                    if(fs.existsSync(uploadFile.path)) {
-                        fs.unlinkSync(uploadFile.path);
-                    }
-                    //сообщаем что все плохо и какие произошли ошибки
-                    res.send({status: 'bad', errors: errors});
-                }
-            });
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+          <title> editor </title>
+         
+        <script type='text/javascript'>//<![CDATA[
+        window.onload=function(){
+        document.getElementById('make-bold').addEventListener('click', function(event){
+            event.preventDefault();
             
-            // при поступление файла
-            form.on('part', function(part) {
-                //читаем его размер в байтах
-                uploadFile.size = part.byteCount;
-                //читаем его тип
-                uploadFile.type = part.headers['content-type'];
-                //путь для сохранения файла
-                uploadFile.path = './public/images/' + part.filename;
+            var selection = window.getSelection();
+            var range = selection.getRangeAt(0).cloneRange();
+            var tag = document.createElement('strong');
+            
+            range.surroundContents(tag);
+            selection.addRange(range);
+        });
+        }//]]> 
 
-                //проверяем размер файла, он не должен быть больше максимального размера
-                if(uploadFile.size > maxSize) {
-                    errors.push('File size is ' + uploadFile.size / 1024 / 1024 + '. Limit is' + (maxSize / 1024 / 1024) + 'MB.');
-                }
+        </script>
+        </head>
 
-                //проверяем является ли тип поддерживаемым
-                if(supportMimeTypes.indexOf(uploadFile.type) == -1) {
-                    errors.push('Unsupported mimetype ' + uploadFile.type);
-                }
+        <body>
+          <div id="editor" contenteditable="true">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
 
-                //если нет ошибок то создаем поток для записи файла
-                if(errors.length == 0) {
-                    var out = fs.createWriteStream(uploadFile.path);
-                    part.pipe(out);
-                }
-                else {
-                    // пропускаем
-                    // здесь нужно остановить загрузку и перейти к onclose
-                    part.resume();
-                }
+        <br><br>
+        <button id="make-bold">Make bold</button>
+        </body>
+        </html>
+
+Text Editor With jQuery
+=======================
+
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <link href="materialize.min.css" rel="stylesheet" async="async"/>
+                <link href="style.css" rel="stylesheet"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                <meta charset="utf-8"/>
+                <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Ubuntu' type='text/css' media='all'/>
+                <script src="jquery.min.js"></script>
+                <script src="texteditor.js"></script>
+                <title>Simple Text Editor Created Using jQuery</title>
+                <style>
+                .font-bold.bold {font-weight:bold}
+                .italic {font-style:italic}
+                .selected .btn {background:orange!important}
+                #openpb {margin:15px}
+                </style>
+            </head>
+
+            <body>
+
+                <div class="site-header">
+                    Developer <span class="site-byline">Coding Experiments</span>
+                </div>
+
+            <div id="content">
+                <h2>Simple Text Editor With jQuery</h2>
+                <div class="ze ie">
+                    <button type="button" class="btn orange" id='stext'>Text</button>
+                    <button type="button" class="btn blue" id='shtml'>HTML</button>
+                </div>
+                
+                <div id="controls" style="margin: 10px;">
+                    <a id="bold" style="color:black;display: inline-block;" class="font-bold">
+                        <button type="button" class="btn indigo">B</button>
+                    </a>
+                    <a id="italic" style="color:black !important;display: inline-block;" class="italic">
+                        <button type="button" class="btn indigo">I</button> 
+                    </a>
+                    <a id="link" class="link" style="display: inline-block;">
+                        <button type="button" class="btn indigo">Link</button>
+                    </a>
+                   
+                    <select id="fonts" class="btn green" style="display: inline-block;">
+                        <option value="Normal">Normal</option>
+                        <option value="Arial">Arial</option>
+                        <option value="Comic Sans MS">Comic Sans MS</option>
+                        <option value="Courier New">Courier New</option>
+                        <option value="Monotype Corsiva">Monotype</option>
+                        <option value="Tahoma New">Tahoma</option>
+                        <option value="Times">Times</option>
+                        <option value="Trebuchet New">Trebuchet</option>
+                        <option value="Ubuntu">Ubuntu</option>
+                    </select>
+                </div>
+
+                <iframe frameborder="0" id="textEditor" style="width:500px; height:80px;border:2px solid #CCC;border-radius:20px;overflow:auto;margin: 10px;"></iframe>
+
+                <textarea name="text" id='text' style="border-radius:20px;overflow:auto;display:none;padding-left: 10px;margin: 10px;" rows="6" cols="53"></textarea>
+
+            </div>
+            <div class="site-footer"><div>
+         </body></html>
+
+
+
+            $(document).ready(function(){
+
+             document.getElementById('textEditor').contentWindow.document.designMode="on";
+             document.getElementById('textEditor').contentWindow.document.close();
+             var edit = document.getElementById("textEditor").contentWindow;
+
+             edit.focus();
+             $("#bold").click(function(){
+              if($(this).hasClass("selected")){
+               $(this).removeClass("selected");
+              }else{
+               $(this).addClass("selected");
+              }
+              boldIt();
+             });
+
+             $("#italic").click(function(){
+              if($(this).hasClass("selected")){
+               $(this).removeClass("selected");
+              }else{
+               $(this).addClass("selected");
+              }
+              ItalicIt();
+             });
+
+             $("#fonts").on('change',function(){
+              changeFont($("#fonts").val());
+             });
+
+             $("#link").click(function(){
+              var urlp=prompt("What is the link:","http://");
+              url(urlp);
+             }); 
+
+             $("#stext").click(function(){
+              $("#text").hide();
+              $("#textEditor").show();
+              $("#controls").show()
+             });
+
+             $("#shtml").on('click',function(){
+              $("#text").css("display","block");
+              $("#textEditor").hide();
+              $("#controls").hide();
+             });
             });
 
-            // парсим форму
-            form.parse(req);
-        });
+            function boldIt(){
+             var edit = document.getElementById("textEditor").contentWindow;
+             edit.focus();
+              edit.document.execCommand("bold", false, "");
+              edit.focus();
+            }
 
-        // routes will go here
-        router.get('/api/test', function(req, res) {
-          var token = req.param('text');
+            function ItalicIt(){
+             var edit = document.getElementById("textEditor").contentWindow;
+             edit.focus();
+             edit.document.execCommand("italic", false, "");
+             edit.focus();
+            }
 
-          res.send(token);
-        });
+            function changeFont(font){
+             var edit = document.getElementById("textEditor").contentWindow;
+             edit.focus();
+             edit.document.execCommand("FontName", false, font);
+             edit.focus();
+            }
 
-        module.exports = router;
+            function url(url){
+             var edit = document.getElementById("textEditor").contentWindow;
+             edit.focus();
+             edit.document.execCommand("Createlink", false, url);
+             edit.focus();
+            }
+
+            setInterval(function(){
+             var gyt=$("#textEditor").contents().find("body").html().match(/@/g);
+             if($("#textEditor").contents().find("body").html().match(/@/g)>=0){}else{
+              $("#text").val($("#textEditor").contents().find("body").html());
+             }
+             $("#text").val($("#textEditor").contents().find("body").html());
+            },1000);
